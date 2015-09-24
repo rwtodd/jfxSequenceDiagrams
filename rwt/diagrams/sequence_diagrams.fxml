@@ -1,0 +1,15 @@
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.canvas.*?>
+
+<BorderPane>
+    <top>
+<Button>Save as PNG</Button>
+    </top>
+    <center>
+<SplitPane>
+             <TextArea>Hi</TextArea>  
+             <ScrollPane><Canvas></Canvas></ScrollPane> 
+        </SplitPane>
+    </center>
+</BorderPane>
