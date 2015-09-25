@@ -20,7 +20,7 @@ public class Renderer {
   // some constants for rendering *************************
   private static final double MARGIN = 10.0;
   private static final double TEXT_SIZE = 14.0;
-  private static final Font TEXT_FONT = Font.font("Arial",TEXT_SIZE);
+  private static final Font TEXT_FONT = Font.font("Helvetica",TEXT_SIZE);
   private static final double MIN_BOX_SEP = TEXT_SIZE * 10.0;
 
 
@@ -46,10 +46,15 @@ public class Renderer {
   }
 
   public void render() {
-     topOfDiagram = MARGIN * 2.0; // RWT temporary 
+     Text title = titleWords();
+     topOfDiagram = MARGIN + title.getLayoutBounds().getHeight() + MARGIN; 
+
      if(diagram.getActors().size() > 0) {
         drawActorBoxes();
      }
+
+     centerTitle(title);
+     shapes.add(title);
   }
 
   public void makeVisible() {
@@ -111,5 +116,26 @@ public class Renderer {
         actorPlacement.put(a.name, xSoFar);
         xSoFar += computedBoxSep;
      }
+  }
+
+  private Text titleWords() {
+    Text title = new Text();
+    title.setFont(Font.font("Helvetica", TEXT_SIZE*1.5));
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setText(diagram.getTitle());
+    title.setTextOrigin(javafx.geometry.VPos.TOP);
+    return title;
+  }
+
+  private void centerTitle(Text title) {
+    // again, it would be better to calc the max and min in one traversal, but
+    // the number of actors should be so small that it really doesn't matter.
+    double maxpt = actorPlacement.values().stream().max(Double::compare).orElse(0.0);
+    double minpt = actorPlacement.values().stream().min(Double::compare).orElse(0.0);
+    double midpt = (maxpt+minpt)/2.0;
+    double offset = midpt - (title.getLayoutBounds().getWidth()/2.0);
+    if(offset < 0) offset = MARGIN;
+    title.setX(offset);
+    title.setY(MARGIN);
   }
 }
