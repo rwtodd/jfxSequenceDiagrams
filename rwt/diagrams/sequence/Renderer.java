@@ -47,10 +47,15 @@ public class Renderer {
 
   public void render() {
      Text title = titleWords();
+     List<Shape> actorBoxes = null;
+
      topOfDiagram = MARGIN + title.getLayoutBounds().getHeight() + MARGIN; 
 
      if(diagram.getActors().size() > 0) {
-        drawActorBoxes();
+        actorBoxes = drawActorBoxes();
+        drawEvents();
+
+        shapes.addAll(actorBoxes);
      }
 
      centerTitle(title);
@@ -64,8 +69,9 @@ public class Renderer {
     });
   }
 
-  private void drawActorBoxes() {
+  private List<Shape> drawActorBoxes() {
      ArrayList<Text> texts = new ArrayList<>();
+     ArrayList<Shape> answer = new ArrayList<>();
 
      for(Diagram.Actor a : diagram.getActors()) {
          Text txt = new Text();
@@ -100,11 +106,11 @@ public class Renderer {
 
         Rectangle r = new Rectangle(xSoFar,topOfDiagram,boxWidth,boxHeight);
         r.getStyleClass().add("actor-box");
-        shapes.add(r);
+        answer.add(r);
 
         txt.setX(xSoFar + (boxWidth - txt.getLayoutBounds().getWidth())/2.0 );
  	txt.setY(topOfDiagram + (boxHeight - txt.getLayoutBounds().getHeight())/2.0 );
-        shapes.add(txt);
+        answer.add(txt);
 
         xSoFar += computedBoxSep;
      }
@@ -116,6 +122,30 @@ public class Renderer {
         actorPlacement.put(a.name, xSoFar);
         xSoFar += computedBoxSep;
      }
+
+     return answer;
+  }
+
+  private void drawActorLanes(double bottom) {
+     for(double x : actorPlacement.values()) {
+        Line line = new Line(x,topOfLines,x,bottom);
+        line.getStyleClass().add("actor-lane");
+        shapes.add(line);
+     }
+  }
+
+  private void drawEvents() {
+     double ylevel = MARGIN + topOfLines;
+     ArrayList<Shape> arrows = new ArrayList<>();
+     ArrayList<Shape> texts = new ArrayList<>();
+ 
+     for(Diagram.Event evt : diagram.getEvents()) {
+        ylevel += 3*MARGIN; // fixme render arrows here!
+     }
+
+     drawActorLanes(ylevel);
+     shapes.addAll(arrows); 
+     shapes.addAll(texts); 
   }
 
   private Text titleWords() {

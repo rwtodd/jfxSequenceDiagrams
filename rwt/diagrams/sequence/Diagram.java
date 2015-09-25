@@ -54,7 +54,7 @@ public class Diagram {
    List<Actor> getActors() { return actors; }
 
    private List<Event> lines;
-   List<Event> getLines() { return lines; } 
+   List<Event> getEvents() { return lines; } 
 
    public Diagram()
    {

@@ -18,12 +18,16 @@
   -fx-fill: antiquewhite ;
 }
 
-.actor-line {
+.actor-lane {
   -fx-stroke: darkgray ;
-  -fx-stroke-width: 2 ;
+  -fx-stroke-width: 4 ;
 }
 
 .actor-arrow {
   -fx-stroke: black ;
   -fx-stroke-width: 2 ;
+}
+
+.text-backing {  /* translucent backing for arrow text */
+  -fx-background-color: rgba(255,255,255,0.7);
 }
