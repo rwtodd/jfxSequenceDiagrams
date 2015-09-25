@@ -3,8 +3,15 @@ package rwt.diagrams.sequence;
 import java.util.List;
 import java.util.ArrayList;
 
+/** An abstract representation of a diagram, suitable
+  * for rendering to screen.
+  * @author Richard Todd
+  */
 public class Diagram {
     // a pure data object, no encapsulation or boilerplate
+    /** Represents an actor in the diagram.
+      * @author Richard Todd
+      */
     class Actor {
       String name;
       String displayName;
@@ -15,14 +22,17 @@ public class Diagram {
     }
     
     // a pure data object, no encapsulation or boilerplate
-    class ActorLine {
+    /** Represents an arrow or note in the diagram.
+      * @author Richard Todd 
+      */ 
+    class Event {
       Actor from;
       Actor to;
       boolean dashed;
       boolean note;
       String desc;
     
-      ActorLine(Actor from, Actor to) {
+      Event(Actor from, Actor to) {
          this.from = from;
          this.to = to;
          dashed = false;
@@ -42,15 +52,15 @@ public class Diagram {
    private List<Actor> actors;
    List<Actor> getActors() { return actors; }
 
-   private List<ActorLine> lines;
-   List<ActorLine> getLines() { return lines; } 
+   private List<Event> lines;
+   List<Event> getLines() { return lines; } 
 
    public Diagram()
    {
        errorState = false;
        title = "Untitled";
        actors = new ArrayList<Actor>();
-       lines = new ArrayList<ActorLine>();
+       lines = new ArrayList<Event>();
    }
 
    Actor maybeNewActor(String name)
@@ -68,9 +78,9 @@ public class Diagram {
        return ans;
    }
 
-   ActorLine addLine(Actor from, Actor to)
+   Event addEvent(Actor from, Actor to)
    {
-       ActorLine ans = new ActorLine(from, to);
+       Event ans = new Event(from, to);
        lines.add(ans);
        return ans;
    }

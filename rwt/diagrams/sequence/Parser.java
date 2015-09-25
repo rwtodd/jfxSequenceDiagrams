@@ -59,7 +59,7 @@ public class Parser {
                 return;
         }
 
-        Diagram.ActorLine ln = d.addLine(actor, actor);
+        Diagram.Event ln = d.addEvent(actor, actor);
         ln.desc = desc;
         ln.note = true;
     }
@@ -114,7 +114,7 @@ public class Parser {
         }
 
         // we definitely have a line now...
-        Diagram.ActorLine line = d.addLine(left, right);
+        Diagram.Event line = d.addEvent(left, right);
 
         // OK, now we have a possible DASHED and STRING...
         Token rest = t.next();
