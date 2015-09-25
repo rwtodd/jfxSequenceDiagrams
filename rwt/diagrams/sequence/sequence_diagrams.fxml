@@ -7,7 +7,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" 
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="rwt.diagrams.SequenceController" 
+            fx:controller="rwt.diagrams.sequence.Controller" 
 >
     <stylesheets> <URL value="@sequence_diagrams.css" /> </stylesheets> 
     <top>

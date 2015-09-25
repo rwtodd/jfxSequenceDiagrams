@@ -1,4 +1,4 @@
-package rwt.diagrams;
+package rwt.diagrams.sequence;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 
-public class SequenceController implements Initializable {
+public class Controller implements Initializable {
 
   @FXML private TextArea sourceArea;
   @FXML private Pane drawingArea;
