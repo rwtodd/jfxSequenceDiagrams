@@ -2,12 +2,12 @@
 
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.control.*?>
 <?import java.net.URL?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" 
-            xmlns:fx="http://javafx.com/fxml/1"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="rwt.diagrams.SequenceController" 
 >
     <stylesheets> <URL value="@sequence_diagrams.css" /> </stylesheets> 
     <top>
@@ -15,7 +15,8 @@
     </top>
     <center>
         <SplitPane>
-             <TextArea fx:id="sourceArea" styleClass="sourceNormal" text="${'Title: Example\na to b: hi\nb to a dashed: hello'}" />
+             <TextArea fx:id="sourceArea" styleClass="sourceNormal" />
+        <!--     <TextArea fx:id="sourceArea" editable="true" styleClass="sourceNormal" text="${'Title: Example\na to b: hi\nb to a dashed: hello'}" /> -->
              <ScrollPane>
                <Pane fx:id="drawingArea">
                </Pane>
