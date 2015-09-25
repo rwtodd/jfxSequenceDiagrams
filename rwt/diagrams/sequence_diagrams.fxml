@@ -1,15 +1,25 @@
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.canvas.*?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<BorderPane>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.control.*?>
+<?import java.net.URL?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" 
+            xmlns:fx="http://javafx.com/fxml/1"
+>
+    <stylesheets> <URL value="@sequence_diagrams.css" /> </stylesheets> 
     <top>
 <Button>Save as PNG</Button>
     </top>
     <center>
-<SplitPane>
-             <TextArea>Hi</TextArea>  
-             <ScrollPane><Canvas></Canvas></ScrollPane> 
+        <SplitPane>
+             <TextArea fx:id="sourceArea" styleClass="sourceNormal" text="${'Title: Example\na to b: hi\nb to a dashed: hello'}" />
+             <ScrollPane>
+               <Pane fx:id="drawingArea">
+               </Pane>
+             </ScrollPane> 
         </SplitPane>
     </center>
 </BorderPane>
