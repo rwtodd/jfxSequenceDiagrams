@@ -1,6 +1,6 @@
 
 .text-area {
-  -fx-font-family: Consolas, Monospace ;
+  -fx-font-family: monospace ;
   -fx-font-size: 12pt ;
 }
 

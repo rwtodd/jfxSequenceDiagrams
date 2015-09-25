@@ -18,7 +18,7 @@ public class SequenceController implements Initializable {
      }); 
   }
 
-  public void setError(bool isError) {
+  public void setError(boolean isError) {
     sourceArea.getStyleClass().removeAll("sourceError","sourceNormal");
     sourceArea.getStyleClass().add(isError ? "sourceError" : "sourceNormal" );
   }
