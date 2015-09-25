@@ -8,7 +8,22 @@
   -fx-background-color: #FFC0CB ;  /* pink */
 }
 
-
 #drawingArea {
   -fx-background-color: #fff ;
+}
+
+.actor-box {
+  -fx-stroke: black ;
+  -fx-stroke-width: 2 ;
+  -fx-fill: antiquewhite ;
+}
+
+.actor-line {
+  -fx-stroke: darkgray ;
+  -fx-stroke-width: 2 ;
+}
+
+.actor-arrow {
+  -fx-stroke: black ;
+  -fx-stroke-width: 2 ;
 }

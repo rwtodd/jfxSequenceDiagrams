@@ -50,6 +50,7 @@ public class Tokenizer implements Iterable<Token> {
                  ans = processIdentifier(c);
                  break;
           }
+
           return ans;
     }
   
@@ -58,7 +59,7 @@ public class Tokenizer implements Iterable<Token> {
        * forever at the end of the input, we need
        * this to decide when we're done. 
        */
-     public boolean hasNext() { return index > src.length(); }
+     public boolean hasNext() { return index <= src.length(); }
   
   
      // process characters and figure out if it's a keyword or not.

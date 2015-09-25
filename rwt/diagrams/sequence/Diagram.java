@@ -1,6 +1,7 @@
 package rwt.diagrams.sequence;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
 /** An abstract representation of a diagram, suitable
@@ -66,15 +67,14 @@ public class Diagram {
    Actor maybeNewActor(String name)
    {
        String searchFor = name.toUpperCase();
-       int idx = actors.indexOf(searchFor);
-       Actor ans; 
-       
-       if (idx >= 0) {
-           ans = actors.get(idx);
-       } else {
-           ans = new Actor(searchFor,name);
-           actors.add(ans);
-       }
+       Optional<Actor> maybe = actors.stream()
+                                     .filter( e -> searchFor.equals(e.name) )
+                                     .findFirst();
+
+       if(maybe.isPresent()) return maybe.get();
+  
+       Actor ans = new Actor(searchFor,name);
+       actors.add(ans);
        return ans;
    }
 

@@ -12,9 +12,14 @@ public class Controller implements Initializable {
   @FXML private Pane drawingArea;
 
 
-  public void initialize(java.net.URL l, java.util.ResourceBundle r) {
+  public void initialize(java.net.URL url, java.util.ResourceBundle bundle) {
      sourceArea.textProperty().addListener( (obs,old,cur) -> {
         /* need to set a timer here, and parse "cur" if the timer goes off */
+        Diagram d = Parser.parse(cur);
+        setError(d.hasErrors());
+        Renderer r = new Renderer(d, drawingArea);
+        r.render();
+        r.makeVisible(); 
      }); 
   }
 
