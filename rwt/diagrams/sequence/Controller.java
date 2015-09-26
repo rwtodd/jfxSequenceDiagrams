@@ -7,7 +7,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.scene.image.WritableImage;
+import javafx.scene.SnapshotParameters;
+import javafx.stage.FileChooser;
 
+/** Controls the main Sequence Diagram scene.
+  * @author Richard Todd 
+  */
 public class Controller implements Initializable {
 
   @FXML private TextArea sourceArea;
@@ -35,6 +41,8 @@ public class Controller implements Initializable {
       }
   };
 
+  /** Augments the FXML in setting up the scene.
+    */
   public void initialize(java.net.URL url, java.util.ResourceBundle bundle) {
      sourceArea.textProperty().addListener( (obs,old,cur) -> {
         if(currentTask != null) currentTask.cancel();
@@ -47,9 +55,28 @@ public class Controller implements Initializable {
      sourceArea.setText("Title: Example\na to b: hello\n");
   }
 
+  /** Applies styles to the souce pane when there is an error. */
   public void setError(boolean isError) {
     sourceArea.getStyleClass().removeAll("sourceError","sourceNormal");
     sourceArea.getStyleClass().add(isError ? "sourceError" : "sourceNormal" );
+  }
+
+  /** Save the current diagram as a PNG file. 
+    * @param evt not used.
+    */
+  @FXML private void savePNG(javafx.event.ActionEvent evt) {
+    try {
+       final FileChooser fch = new FileChooser();
+       fch.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG File","*.png"));
+       final java.io.File saveAs = fch.showSaveDialog(null);
+       if(saveAs != null) {
+          WritableImage snapshot = drawingArea.snapshot(new SnapshotParameters(),null);
+          java.awt.image.BufferedImage bi = javafx.embed.swing.SwingFXUtils.fromFXImage(snapshot, null);
+          javax.imageio.ImageIO.write(bi,"PNG",saveAs);
+       }
+    } catch(java.io.IOException e) {
+        System.err.println(e);
+    }
   }
 
   public Controller() {

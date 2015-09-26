@@ -12,12 +12,11 @@
 >
     <stylesheets> <URL value="@sequence_diagrams.css" /> </stylesheets> 
     <top>
-<Button>Save as PNG</Button>
+         <Button onAction="#savePNG">Save as PNG</Button>
     </top>
     <center>
         <SplitPane>
              <TextArea fx:id="sourceArea" styleClass="sourceNormal" />
-        <!--     <TextArea fx:id="sourceArea" editable="true" styleClass="sourceNormal" text="${'Title: Example\na to b: hi\nb to a dashed: hello'}" /> -->
              <ScrollPane>
                <Pane fx:id="drawingArea">
                  <padding><Insets bottom="5.0" left="5.0" right="5.0" top="5.0" /></padding>
@@ -26,3 +25,4 @@
         </SplitPane>
     </center>
 </BorderPane>
+
