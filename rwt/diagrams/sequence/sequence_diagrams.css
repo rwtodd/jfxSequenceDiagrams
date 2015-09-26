@@ -12,7 +12,7 @@
   -fx-background-color: #fff ;
 }
 
-.actor-box {
+.actor-box, .note-box {
   -fx-stroke: black ;
   -fx-stroke-width: 2 ;
   -fx-fill: antiquewhite ;
@@ -23,9 +23,15 @@
   -fx-stroke-width: 4 ;
 }
 
-.actor-arrow {
+.arrow-solid {
   -fx-stroke: black ;
   -fx-stroke-width: 2 ;
+}
+.arrow-dashed {
+  -fx-stroke: black ;
+  -fx-stroke-width: 2 ;
+  -fx-stroke-dash-array: 6 4  ;
+  -fx-stroke-dash-offset: 0 ;
 }
 
 .text-backing {  /* translucent backing for arrow text */

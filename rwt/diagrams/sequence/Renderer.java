@@ -22,6 +22,7 @@ public class Renderer {
   private static final double TEXT_SIZE = 14.0;
   private static final Font TEXT_FONT = Font.font("Helvetica",TEXT_SIZE);
   private static final double MIN_BOX_SEP = TEXT_SIZE * 10.0;
+  private static final double ARROW_SEP = TEXT_SIZE * 2.0;
 
 
   // some variables used during rendering *****************
@@ -109,7 +110,7 @@ public class Renderer {
         answer.add(r);
 
         txt.setX(xSoFar + (boxWidth - txt.getLayoutBounds().getWidth())/2.0 );
- 	txt.setY(topOfDiagram + (boxHeight - txt.getLayoutBounds().getHeight())/2.0 );
+        txt.setY(topOfDiagram + (boxHeight - txt.getLayoutBounds().getHeight())/2.0 );
         answer.add(txt);
 
         xSoFar += computedBoxSep;
@@ -140,12 +141,104 @@ public class Renderer {
      ArrayList<Shape> texts = new ArrayList<>();
  
      for(Diagram.Event evt : diagram.getEvents()) {
-        ylevel += 3*MARGIN; // fixme render arrows here!
+        if(evt.from.name.equals(evt.to.name)) {
+           if(evt.note) {
+              ylevel = renderNote(ylevel, evt, texts, arrows);
+           } else {
+              ylevel = renderSelfArrow(ylevel, evt, texts, arrows);
+           }
+        } else {
+           ylevel = renderArrow(ylevel, evt, texts, arrows); 
+        }
      }
 
      drawActorLanes(ylevel);
      shapes.addAll(arrows); 
      shapes.addAll(texts); 
+  }
+
+  private double renderNote(double ylevel, 
+                            Diagram.Event evt,
+                            List<Shape> texts,
+                            List<Shape> arrows) {
+     double ax = actorPlacement.get(evt.from.name);
+     double midpt = (ax + ax + computedBoxSep) / 2.0;
+     
+     // render text to 80% of the length
+     final Text words = renderArrowText(computedBoxSep, evt.desc);
+     final double wordsWidth = words.getLayoutBounds().getWidth();
+     final double wordsHeight = words.getLayoutBounds().getHeight();
+     words.setY(ylevel + MARGIN);
+     words.setX(midpt - wordsWidth/2.0);
+     texts.add(words);
+
+     // draw the surrounding box
+     final double rwidth = wordsWidth + 2*MARGIN;
+     final double rheight = wordsHeight + 2*MARGIN;
+     Rectangle r = new Rectangle(midpt - rwidth/2.0, 
+                                 ylevel, 
+                                 rwidth,
+                                 rheight);
+     r.getStyleClass().add("note-box");
+     
+     // draw a line heading to the box...
+     Line l = new Line(ax, 
+                       ylevel + rheight/2.0,
+                       midpt,
+                       ylevel + rheight/2.0);
+     l.getStyleClass().add("arrow-solid");                    
+     arrows.add(l); 
+     arrows.add(r); 
+
+     return (ylevel + rheight + ARROW_SEP);
+  }
+
+  private Text renderArrowText(double len, 
+                               String desc) {
+     Text txt = new Text();
+     txt.setFont(TEXT_FONT);
+     txt.setWrappingWidth(len*0.8);
+     txt.setTextAlignment(TextAlignment.CENTER);
+     txt.setText(desc);
+     txt.setTextOrigin(javafx.geometry.VPos.TOP);
+     return txt;
+  }
+
+
+  private double renderSelfArrow(double ylevel, 
+                                 Diagram.Event evt,
+                                 List<Shape> texts,
+                                 List<Shape> arrows) {
+     return ylevel;
+
+  }
+  private double renderArrow(double ylevel, 
+                             Diagram.Event evt,
+                             List<Shape> texts,
+                             List<Shape> arrows) {
+     final double ax = actorPlacement.get(evt.from.name);
+     final double bx = actorPlacement.get(evt.to.name);
+     final double length = Math.abs(ax - bx);
+     final double midpt = (ax + bx)/2.0; 
+
+     final Text words = renderArrowText(length,evt.desc);
+     final double wordsWidth = words.getLayoutBounds().getWidth();
+     final double wordsHeight = words.getLayoutBounds().getHeight();
+     words.setY(ylevel);
+     words.setX(midpt - wordsWidth/2.0);
+     // FIXME maybe add translucent box here...
+     texts.add(words);
+     
+     // move down by the size of the text...
+     ylevel += wordsHeight + MARGIN/2.0;
+
+     // draw the line...
+     Line l = new Line(ax,ylevel,bx,ylevel);
+     l.getStyleClass().add(evt.dashed?"arrow-dashed":"arrow-solid"); 
+     arrows.add(l);
+     // FIXME drawArrowHead(Math.sign(ax-bx),arrows,bx,ylevel);
+
+     return ylevel + ARROW_SEP;
   }
 
   private Text titleWords() {
