@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Polyline;
 import javafx.scene.text.*;
 import javafx.scene.layout.Pane;
 
@@ -22,7 +23,9 @@ public class Renderer {
   private static final double TEXT_SIZE = 14.0;
   private static final Font TEXT_FONT = Font.font("Helvetica",TEXT_SIZE);
   private static final double MIN_BOX_SEP = TEXT_SIZE * 10.0;
+  private static final double WRAPPING_WIDTH = TEXT_SIZE * 10.0;
   private static final double ARROW_SEP = TEXT_SIZE * 2.0;
+  private static final double AHEAD_SIZE = TEXT_SIZE * 0.8;
 
 
   // some variables used during rendering *****************
@@ -77,10 +80,12 @@ public class Renderer {
      for(Diagram.Actor a : diagram.getActors()) {
          Text txt = new Text();
          txt.setFont(TEXT_FONT);
-         txt.setWrappingWidth(TEXT_SIZE * 10.0);
          txt.setTextAlignment(TextAlignment.CENTER);
          txt.setText(a.displayName);
          txt.setTextOrigin(javafx.geometry.VPos.TOP);
+         if(txt.getLayoutBounds().getWidth() > WRAPPING_WIDTH) {
+            txt.setWrappingWidth(WRAPPING_WIDTH);
+         }
          texts.add(txt);
      }
    
@@ -104,7 +109,6 @@ public class Renderer {
      computedBoxSep = Math.max( MIN_BOX_SEP, boxWidth * 1.5 );
 
      for(Text txt : texts) {
-
         Rectangle r = new Rectangle(xSoFar,topOfDiagram,boxWidth,boxHeight);
         r.getStyleClass().add("actor-box");
         answer.add(r);
@@ -209,7 +213,33 @@ public class Renderer {
                                  Diagram.Event evt,
                                  List<Shape> texts,
                                  List<Shape> arrows) {
-     return ylevel;
+     // determine the midpoint between the nearest actors
+     final double ax = actorPlacement.get(evt.from.name);
+     final double midpt =  (ax + ax + computedBoxSep)/2.0;
+     
+     // render text to 80% of the length...
+     final Text words = renderArrowText(computedBoxSep, evt.desc);
+     final double wordsWidth = words.getLayoutBounds().getWidth();
+     final double wordsHeight = words.getLayoutBounds().getHeight();
+     words.setY(ylevel);
+     words.setX(midpt - wordsWidth/2.0);
+     texts.add(words);
+
+     // mvoe down by the size of the text...
+     ylevel += wordsHeight + MARGIN/2.0;
+
+
+     // draw the polyline...
+     final double bottom = ylevel + ARROW_SEP;
+     Polyline p = new Polyline(ax,ylevel,
+                               midpt,ylevel,
+                               midpt,bottom,
+                               ax,bottom);
+     p.getStyleClass().add(evt.dashed?"arrow-dashed":"arrow-solid"); 
+     arrows.add(p);
+     drawArrowHead(1.0,arrows,ax,bottom);
+
+     return bottom + ARROW_SEP; 
 
   }
   private double renderArrow(double ylevel, 
@@ -226,7 +256,12 @@ public class Renderer {
      final double wordsHeight = words.getLayoutBounds().getHeight();
      words.setY(ylevel);
      words.setX(midpt - wordsWidth/2.0);
-     // FIXME maybe add translucent box here...
+
+     // add a translucent backing to the words...
+     Rectangle r = new Rectangle(words.getX(),words.getY(),wordsWidth,wordsHeight);
+     r.getStyleClass().add("text-backing");
+     texts.add(r);
+
      texts.add(words);
      
      // move down by the size of the text...
@@ -236,9 +271,20 @@ public class Renderer {
      Line l = new Line(ax,ylevel,bx,ylevel);
      l.getStyleClass().add(evt.dashed?"arrow-dashed":"arrow-solid"); 
      arrows.add(l);
-     // FIXME drawArrowHead(Math.sign(ax-bx),arrows,bx,ylevel);
+     drawArrowHead(Math.signum(ax-bx),arrows,bx,ylevel);
 
      return ylevel + ARROW_SEP;
+  }
+
+  private void drawArrowHead(final double direction, final List<Shape> arrows, final double x, final double y) {
+     final double backX = x + direction*AHEAD_SIZE;
+     final double deltaY = AHEAD_SIZE/2.0;
+     Polyline p = new Polyline( backX, y+deltaY,
+                                x,y,
+                                backX, y-deltaY);
+
+     p.getStyleClass().add("arrow-solid");
+     arrows.add(p);   
   }
 
   private Text titleWords() {
