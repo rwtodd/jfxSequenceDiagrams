@@ -197,14 +197,18 @@ public class Renderer {
      return (ylevel + rheight + ARROW_SEP);
   }
 
-  private Text renderArrowText(double len, 
-                               String desc) {
-     Text txt = new Text();
+  private Text renderArrowText(final double len, 
+                               final String desc) {
+     final double wrappingLen = len*0.8;
+     final Text txt = new Text();
      txt.setFont(TEXT_FONT);
-     txt.setWrappingWidth(len*0.8);
      txt.setTextAlignment(TextAlignment.CENTER);
      txt.setText(desc);
      txt.setTextOrigin(javafx.geometry.VPos.TOP);
+
+     if(txt.getLayoutBounds().getWidth() > wrappingLen) {
+       txt.setWrappingWidth(wrappingLen);
+     }
      return txt;
   }
 
