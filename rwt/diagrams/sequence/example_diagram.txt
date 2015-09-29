@@ -1,0 +1,17 @@
+Title: Example Diagram
+
+# You can name the actors, if you want.
+                
+all: Allocator
+mem: Memory Ctrl
+
+# Here is how you make arrows and notes:
+                
+all to mem: run()
+mem to Blocks: search()
+blocks to self: looks up 
+blocks to Bounds: check(blk)
+bounds to blocks dashed
+note blocks: when we find space, we return it as-is
+blocks to mem dashed: found space
+mem to all dashed

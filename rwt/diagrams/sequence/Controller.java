@@ -10,6 +10,9 @@ import java.util.TimerTask;
 import javafx.scene.image.WritableImage;
 import javafx.scene.SnapshotParameters;
 import javafx.stage.FileChooser;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
 
 /** Controls the main Sequence Diagram scene.
   * @author Richard Todd 
@@ -52,7 +55,20 @@ public class Controller implements Initializable {
         renderTimer.schedule(currentTask,1500);
      }); 
 
-     sourceArea.setText("Title: Example\na to b: hello\n");
+     String example = "";
+     try( InputStream is = (InputStream)this.getClass().getResource("example_diagram.txt").getContent();
+          InputStreamReader isr = new InputStreamReader(is);
+          BufferedReader br = new BufferedReader(isr) ) {
+        StringBuilder sb = new StringBuilder();
+        for(String line = br.readLine(); line != null; line = br.readLine()) {
+            sb.append(line).append('\n');
+        } 
+        example = sb.toString();
+     } catch(java.io.IOException e) {
+        example = "Error loading example diagram.";
+     }
+     sourceArea.setText(example);
+
   }
 
   /** Applies styles to the souce pane when there is an error. */

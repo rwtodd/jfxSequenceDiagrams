@@ -169,7 +169,7 @@ public class Renderer {
      double midpt = (ax + ax + computedBoxSep) / 2.0;
      
      // render text to 80% of the length
-     final Text words = renderArrowText(computedBoxSep, evt.desc);
+     final Text words = renderArrowText(computedBoxSep*0.9, evt.desc);
      final double wordsWidth = words.getLayoutBounds().getWidth();
      final double wordsHeight = words.getLayoutBounds().getHeight();
      words.setY(ylevel + MARGIN);
