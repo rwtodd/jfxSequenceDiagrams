@@ -5,5 +5,5 @@
 # the moment, for utilities, I stick with a 2-line shell script. 
 
 javac -cp . rwt/diagrams/sequence/*.java rwt/diagrams/Sequence.java
-find rwt -type f \! -name '*.java' | xargs jar cvfe sequence_diagrams.jar rwt.diagrams.Sequence 
+find rwt -type f \! -name '*.java' | xargs jar cvfm sequence_diagrams.jar Manifest.txt
 
