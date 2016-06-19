@@ -1,8 +1,0 @@
-Name: rwt/diagrams/sequence
-Specification-Title: Sequence Diagrams Tool
-Specification-Version: 1.0
-Specification-Vendor: Richard Todd (WaywardCode.com)
-Implementation-Title: Sequence Diagrams Tool
-Implementation-Version: 1.0
-Implementation-Vendor: Richard Todd (WaywardCode.com)
-Main-Class: rwt.diagrams.Sequence
