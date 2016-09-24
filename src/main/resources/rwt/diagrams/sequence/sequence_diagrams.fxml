@@ -12,7 +12,7 @@
 >
     <stylesheets> <URL value="@sequence_diagrams.css" /> </stylesheets> 
     <top>
-         <Button onAction="#savePNG">Save as PNG</Button>
+         <Button maxWidth="9999" onAction="#savePNG">Save as PNG</Button>
     </top>
     <center>
         <SplitPane>
